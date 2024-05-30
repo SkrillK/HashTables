@@ -27,7 +27,7 @@ vector<string> lineRead()
     return words;
 }
 
-unordered_map<int, vector<string>> hashTableFill()
+unordered_map<int, string> hashTableFill()
 {
     int numContainers;
 
@@ -38,7 +38,7 @@ unordered_map<int, vector<string>> hashTableFill()
     cout << "    Word\tCodeSum\tContIndex\n";
 
     vector<string> words = lineRead();
-    unordered_map<int, vector<string>> containers;
+    unordered_map<int, string> containers;
 
     for (string word : words)
     {
@@ -49,9 +49,25 @@ unordered_map<int, vector<string>> hashTableFill()
 
         int containerNum = sum % numContainers;
 
-        cout << "    " << word << " \t" << sum << "\t" << containerNum << "\n";
 
-        containers[containerNum].push_back(word);
+        if (!containers[containerNum].empty())
+        {
+            bool flag = true;
+
+            for (int i = 0; i <= containers.size(); i++)
+                if (containers[i].empty())
+                {
+                    containers[i] = word;
+                    cout << "    " << word << " \t" << sum << "\t" << containerNum << " -> " << i << "\n";
+                    flag = false;
+                    break;
+                }
+        }
+        else 
+        {
+            containers[containerNum] = word;
+            cout << "    " << word << " \t" << sum << "\t" << containerNum << "\n";
+        }
     }
 
     cout << "\n= Result ==========================\n";
@@ -61,20 +77,16 @@ unordered_map<int, vector<string>> hashTableFill()
 
 int main()
 {
-    unordered_map<int, vector<string>> containers = hashTableFill();
+    unordered_map<int, string> containers = hashTableFill();
 
     for (int i = 0; i < containers.size(); i++)
     {
-        cout << "  C" << i + 1 << ":\t";
+        cout << "  C" << i << ":\t";
 
         if (containers[i].empty())
             cout << "null";
         else
-        {
-            for (string word : containers[i])
-                cout << word << "\t";
-
-        }
+            cout << containers[i] << "\t";
 
         cout << endl;
     }
